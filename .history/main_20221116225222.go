@@ -7,8 +7,6 @@ import (
 )
 
 func main(){
-	database.ConnectDB() 
-	
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{

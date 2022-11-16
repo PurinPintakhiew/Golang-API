@@ -10,13 +10,14 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	dsn := "root:@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("failed to connect database")
 	} else {
 		fmt.Println("connected database")
-		DB = db
-		db.AutoMigrate(&models.Users{})
+		DB = d
+		data.AutoMigrate(&models.Cars{})
+		data.AutoMigrate(&models.Users{})
 	}
 }
