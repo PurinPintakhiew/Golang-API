@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"github.com/PurinPintakhiew/Golang-API/database"
+	"github.com/PurinPintakhiew/Golang-API/models"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/PurinPintakhiew/Golang-API/models"
-	"github.com/PurinPintakhiew/Golang-API/database"
 	"strconv"
 	"time"
 )
@@ -19,12 +19,12 @@ func Register(c *fiber.Ctx) error {
 		return err
 	}
 
-	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]),15)
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 15)
 
 	user := models.Users{
-		Name:  data["name"],
-		Status: data["status"],
-		Email: data["email"],
+		Name:     data["name"],
+		Status:   data["status"],
+		Email:    data["email"],
 		Password: password,
 	}
 
@@ -50,7 +50,7 @@ func Login(c *fiber.Ctx) error {
 	if user.Id == 0 {
 		c.Status(fiber.StatusNotFound)
 		return c.JSON(fiber.Map{
-			"message":"user not found",
+			"message": "user not found",
 		})
 	}
 
@@ -62,8 +62,8 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer: strconv.Itoa(int(user.Id)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),// 1 วัน 
+		Issuer:    strconv.Itoa(int(user.Id)),
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // 1 วัน
 	})
 
 	token, err := claims.SignedString([]byte(SecretKey))
@@ -76,9 +76,25 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name: "tora",
-		Value: token,
-		Expires: time.Now().Add(time.Hour * 24),
+		Name:     "tora",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+
+}
+
+func Logout(c *fiber.Ctx) error {
+	cookie := fiber.Cookie{
+		Name:     "tora",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
 		HTTPOnly: true,
 	}
 
