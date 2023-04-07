@@ -2,7 +2,7 @@
 
 This project use packages gorm fiber and use database is MySQL. 
 
-<img src="https://drive.google.com/uc?id=11wXLcPIqGoljJuyVU2qwolvZscMTblVq" />
+![](https://drive.google.com/uc?id=11wXLcPIqGoljJuyVU2qwolvZscMTblVq)
 
 ### Usage
 ```golang
@@ -36,5 +36,5 @@ app.Use(cors.New(cors.Config{
 [Document Fiber](https://docs.gofiber.io/)
 
 ## Mysql
-![](https://labs.mysql.com/common/logos/mysql-logo.svg?v2)
+![](https://drive.google.com/uc?id=100mSkPFRLxovYDAHOUUSGVGaDkuUf0rN)
 
