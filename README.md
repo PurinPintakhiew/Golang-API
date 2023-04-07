@@ -9,6 +9,7 @@ This project use packages gorm fiber and use database is MySQL.
 // command run
 go run main.go
 ```
+[Document Golang](https://go.dev/doc/)
 
 ## Gorm
 ### Connect Mysql
