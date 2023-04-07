@@ -33,3 +33,5 @@ app.Use(cors.New(cors.Config{
 [Document Fiber](https://docs.gofiber.io/)
 
 ## Mysql
+![](https://labs.mysql.com/common/logos/mysql-logo.svg?v2)
+
