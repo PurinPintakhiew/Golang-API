@@ -2,6 +2,8 @@
 
 This project use packages gorm fiber and use database is MySQL. 
 
+<img src="https://drive.google.com/uc?id=11wXLcPIqGoljJuyVU2qwolvZscMTblVq" />
+
 ### Usage
 ```golang
 // command run
