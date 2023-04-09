@@ -32,6 +32,9 @@ app := fiber.New()
 app.Use(cors.New(cors.Config{
 	AllowCredentials: true,
 }))
+
+// set port
+app.Listen((":8080"))
 ```
 [Document Fiber](https://docs.gofiber.io/)
 
