@@ -12,8 +12,9 @@ go run main.go
 [Document Golang](https://go.dev/doc/)
 
 ## Gorm
-### Connect Mysql
+GORM is an ORM library that handles multiple databases such as MySQL, PostgreSQL, and SQLite.
 
+### Connect Mysql
  ```golang
 // username = root, ip = tcp, database = test
 dsn := "root:@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
