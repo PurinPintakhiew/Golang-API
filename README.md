@@ -6,7 +6,7 @@ This project use packages gorm fiber and use database is MySQL.
 
 ### Usage
 ```golang
-// command run
+// command run api
 go run main.go
 ```
 [Document Golang](https://go.dev/doc/)
