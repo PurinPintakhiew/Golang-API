@@ -16,7 +16,7 @@ GORM is an ORM library that handles multiple databases such as MySQL, PostgreSQL
 
 ### Connect Mysql
  ```golang
-// username = root, ip = 127.0.0.1:3306, database = test
+// username = root, ip = 127.0.0.1:3306, database name = test
 dsn := "root:@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
 db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 ```
