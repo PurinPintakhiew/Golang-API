@@ -34,6 +34,9 @@ app.Use(cors.New(cors.Config{
 	AllowCredentials: true,
 }))
 
+// set folder public is static
+app.Static("/static", "./public")
+
 // set port
 app.Listen((":8080"))
 ```
