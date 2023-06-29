@@ -23,6 +23,7 @@ db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 [Document Gorm](https://gorm.io/docs/)
 
 ## Fiber
+Fiber is a modern web framework for the Go programming language. It aims to provide a fast, flexible, and efficient way to build web applications and APIs. Fiber is inspired by Express.js, a popular web framework for JavaScript.
 
 ### Config
  ```golang
