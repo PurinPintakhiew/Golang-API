@@ -14,6 +14,20 @@ go run main.go
 ## Gorm
 GORM is an ORM library that handles multiple databases such as MySQL, PostgreSQL, and SQLite.
 
+### Installation
+```golang
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/sqlite
+```
+
+### Import
+```golang
+import (
+  "gorm.io/driver/mysql"
+  "gorm.io/gorm"
+)
+```
+
 ### Connect Mysql
  ```golang
 // username = root, ip = 127.0.0.1:3306, database name = test
@@ -24,6 +38,19 @@ db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 ## Fiber
 Fiber is a modern web framework for the Go programming language. It aims to provide a fast, flexible, and efficient way to build web applications and APIs. Fiber is inspired by Express.js, a popular web framework for JavaScript.
+
+### Installation
+```golang
+go get github.com/gofiber/fiber/v2
+```
+
+### Import
+```golang
+import (
+  "github.com/gofiber/fiber/v2"
+  "github.com/gofiber/fiber/v2/middleware/cors"
+)
+```
 
 ### Config
  ```golang
