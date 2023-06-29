@@ -17,7 +17,7 @@ GORM is an ORM library that handles multiple databases such as MySQL, PostgreSQL
 ### Installation
 ```golang
 go get -u gorm.io/gorm
-go get -u gorm.io/driver/sqlite
+go get -u gorm.io/driver/mysql
 ```
 
 ### Import
