@@ -1,16 +1,36 @@
 package controllers
 
 import (
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/PurinPintakhiew/Golang-API/database"
 	"github.com/PurinPintakhiew/Golang-API/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
-	"strconv"
-	"time"
 )
 
 const SecretKey = "1212312121"
+
+func GenerateToken(user models.Users) (string, error) {
+	SecretKey := os.Getenv("SECRET_KEY")
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_id"] = user.Id
+
+	// Convert the expiration time to a Unix timestamp
+	expirationTime := time.Now().Add(time.Hour * 24).Unix()
+	claims["exp"] = expirationTime
+
+	tokenString, err := token.SignedString([]byte(SecretKey))
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+}
 
 func Register(c *fiber.Ctx) error {
 	var data map[string]string
