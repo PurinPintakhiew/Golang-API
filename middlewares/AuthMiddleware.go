@@ -1,15 +1,16 @@
 package middlewares
 
 import (
+	"os"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
-const SecretKey = "123456789"
-
 func AuthMiddleware(c *fiber.Ctx) error {
+	SecretKey := os.Getenv("SECRET_KEY")
+
 	authorizationHeader := c.Get("Authorization")
 
 	parts := strings.Split(authorizationHeader, " ")
