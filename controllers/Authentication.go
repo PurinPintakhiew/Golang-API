@@ -2,25 +2,22 @@ package controllers
 
 import (
 	"os"
-	"strconv"
 	"time"
 
-	"github.com/PurinPintakhiew/Golang-API/database"
+	"github.com/PurinPintakhiew/Golang-API/configs"
 	"github.com/PurinPintakhiew/Golang-API/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
-const SecretKey = "1212312121"
-
+// generate token
 func GenerateToken(user models.Users) (string, error) {
 	SecretKey := os.Getenv("SECRET_KEY")
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["user_id"] = user.Id
 
-	// Convert the expiration time to a Unix timestamp
 	expirationTime := time.Now().Add(time.Hour * 24).Unix()
 	claims["exp"] = expirationTime
 
@@ -32,96 +29,69 @@ func GenerateToken(user models.Users) (string, error) {
 	return tokenString, nil
 }
 
+// register
 func Register(c *fiber.Ctx) error {
-	var data map[string]string
-
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-
-	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 15)
-
-	user := models.Users{
-		Name:     data["name"],
-		Status:   data["status"],
-		Email:    data["email"],
-		Password: password,
-	}
-
-	database.DB.Create(&user)
-
-	return c.JSON(fiber.Map{
-		"message": "success",
-	})
-
-}
-
-func Login(c *fiber.Ctx) error {
-	var data map[string]string
+	var data models.RegistrationData
 
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
 
 	var user models.Users
+	existingUser := configs.DB.Where("email = ?", data.Email).First(&user)
 
-	database.DB.Where("email = ?", data["email"]).First(&user)
-
-	if user.Id == 0 {
-		c.Status(fiber.StatusNotFound)
-		return c.JSON(fiber.Map{
-			"message": "user not found",
-		})
+	if existingUser.RowsAffected > 0 {
+		return c.Status(409).JSON(fiber.Map{"status": false, "message": "Email already in use"})
 	}
 
-	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "incorrect password",
-		})
+	hashPassword, _ := bcrypt.GenerateFromPassword([]byte(data.Password), 15)
+
+	newUser := models.Users{
+		UserName: data.UserName,
+		Email:    data.Email,
+		Password: hashPassword,
 	}
 
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer:    strconv.Itoa(int(user.Id)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // 1 วัน
-	})
+	configs.DB.Create(&newUser)
 
-	token, err := claims.SignedString([]byte(SecretKey))
-
+	token, err := GenerateToken(newUser)
 	if err != nil {
-		c.Status(fiber.StatusInternalServerError)
-		return c.JSON(fiber.Map{
-			"message": "could not login",
-		})
+		return err
 	}
-
-	cookie := fiber.Cookie{
-		Name:     "tora",
-		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 24),
-		HTTPOnly: true,
-	}
-
-	c.Cookie(&cookie)
 
 	return c.JSON(fiber.Map{
-		"message": "success",
+		"status":      true,
+		"users":       newUser,
+		"accessToken": token,
 	})
 
 }
 
-func Logout(c *fiber.Ctx) error {
-	cookie := fiber.Cookie{
-		Name:     "tora",
-		Value:    "",
-		Expires:  time.Now().Add(-time.Hour),
-		HTTPOnly: true,
+// login
+func Login(c *fiber.Ctx) error {
+	var data models.LoginData
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
 	}
 
-	c.Cookie(&cookie)
+	var user models.Users
+	if err := configs.DB.Where("email = ?", data.Email).First(&user).Error; err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid credentials"})
+	}
+
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data.Password)); err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid credentials"})
+	}
+
+	token, err := GenerateToken(user)
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(fiber.Map{
-		"message": "success",
+		"status":      true,
+		"users":       user,
+		"accessToken": token,
 	})
-
 }
