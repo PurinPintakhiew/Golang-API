@@ -18,6 +18,7 @@ func Route() {
 		return c.JSON(fiber.Map{"message": "This request does not exist."})
 	})
 
+	
 	app.Post("/api/register", controllers.Register)
 	app.Post("/api/login", controllers.Login)
 
