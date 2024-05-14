@@ -70,6 +70,3 @@ app.Listen((":8080"))
 ```
 [Document Fiber](https://docs.gofiber.io/)
 
-## Mysql
-![](https://drive.google.com/uc?id=100mSkPFRLxovYDAHOUUSGVGaDkuUf0rN)
-
