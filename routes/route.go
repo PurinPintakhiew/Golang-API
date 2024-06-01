@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/PurinPintakhiew/Golang-API/controllers"
+	"github.com/PurinPintakhiew/Golang-API/middlewares"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -18,9 +19,10 @@ func Route() {
 		return c.JSON(fiber.Map{"message": "This request does not exist."})
 	})
 
-	
 	app.Post("/api/register", controllers.Register)
 	app.Post("/api/login", controllers.Login)
+
+	app.Get("/api/users", middlewares.AuthMiddleware, controllers.Users)
 
 	app.Listen((":8080"))
 }
