@@ -1,15 +1,14 @@
 package models
 
 type Users struct {
-	Id       uint   `json:"id"`
-	UserName string `json:"userName"`
-	Email    string `json:"email"`
-	Password []byte `json:"-"`
-	UserId   []byte `json:"UserId"`
+    Id       uint   `json:"id" gorm:"primaryKey"`
+    UserName string `json:"user_name"`
+    Email    string `json:"email" gorm:"uniqueIndex"`
+    Password []byte `json:"-"`
 }
 
 type RegistrationData struct {
-	UserName string `json:"userName"`
+	UserName string `json:"user_name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
