@@ -16,7 +16,7 @@ func Users(c *fiber.Ctx) error {
 	}
 
 	if result.RowsAffected == 0 {
-		return c.Status(404).JSON(fiber.Map{"status": false, "message": "Data not found"})
+		return c.Status(404).JSON(fiber.Map{"status": false, "message": "Data not found", "data": users})
 	}
 
 	return c.JSON(fiber.Map{"status": true, "data": users})
